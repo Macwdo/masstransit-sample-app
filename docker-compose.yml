@@ -1,0 +1,35 @@
+version: '3.7'
+
+
+services:
+  customer_app_db:
+    container_name: customer_app_db
+    image: postgres:latest
+    volumes:
+      - ./.data/postgres:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5431:5432"
+
+  customer_app_mq:
+    container_name: customer_app_mq
+    image: rabbitmq:3-management-alpine
+    restart: always
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    ports:
+      - "5671:5671"
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./.data/rabbitmq/data/:/var/lib/rabbitmq/
+
+
+volumes: 
+  customer_app_db_volume:
